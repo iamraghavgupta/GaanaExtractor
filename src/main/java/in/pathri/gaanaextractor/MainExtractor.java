@@ -168,6 +168,15 @@ public class MainExtractor {
 					}
 
 					try {
+						strData = (String) ((JSONArray) JsonPath.read(songMeta, strBasePath + "release_date")).get(0);
+						tag.setField(FieldKey.YEAR, strData);
+					} catch (KeyNotFoundException | FieldDataInvalidException e) {
+						tagErrors.add("YEAR");
+						logger.catching(e);
+//						e.printStackTrace();
+					}
+                                        
+                                        try {
 						strData = (String) ((JSONArray) JsonPath.read(songMeta, strBasePath + "lyrics_url")).get(0);
 						tag.setField(FieldKey.URL_LYRICS_SITE, strData);
 					} catch (KeyNotFoundException | FieldDataInvalidException e) {
@@ -177,7 +186,7 @@ public class MainExtractor {
 					}
 
 					try {
-						strData = (String) ((JSONArray) JsonPath.read(songMeta, strBasePath + "artwork")).get(0);
+						strData = (String) ((JSONArray) JsonPath.read(songMeta, strBasePath + "artwork_large")).get(0);
 						byte[] strImgData = getByteArray(strData);
 						Artwork artwork = ArtworkFactory.getNew();
 						artwork.setBinaryData(strImgData);
